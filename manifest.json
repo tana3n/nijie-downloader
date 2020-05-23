@@ -1,7 +1,7 @@
   {
     "manifest_version": 2,
     "name": "nijie-downloader",
-    "description": "nijieの作品ページで画像DL出来るようにする物",
+    "description": "コンテキストメニューからnijieの画像をダウンロード",
     "version": "1.0",
     "author": "tana3n",
     "icons": {
@@ -19,7 +19,7 @@
         }
       ],
       "background": {
-        "scripts": ["jquery-3.5.1.min.js", "event_page.js"],
+        "scripts": ["event_page.js"],
         "persistent": false
       },
     "permissions": [

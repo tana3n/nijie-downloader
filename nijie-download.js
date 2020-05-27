@@ -32,7 +32,7 @@
   getDiff =　function() {
     var diff = $('#img_diff a').length;
     if (diff == null){
-      return diff = 0
+      return 0
     }else{
       return diff;
     }
@@ -56,7 +56,7 @@
 //img_diff内に中身があるかどうかで判定かなぁ
 //最後のdiff_*を引っ張り出して枚数検出
     getDiffmacro　=　function(num){
-      return (''+num).padStart(2,'0');
+      return (''+(num+1)).padStart(2,'0');
     }//0パテ用
     
     getIllustID = function(){
@@ -89,7 +89,7 @@ var Maxpagenum2 = getDiffmacro(getDiff())
 var Maxpagenum = getDiff()
 
 var basename = getUsername()+String('(')+getUserID()+String(')')+String(' - ')+getTitle()+String('(')+getIllustID()+String(')')
-var diffmacro = Pagenum2+String('of')+Maxpagenum2
+var diffmacro = String(' [')+Pagenum2+String(' - ')+Maxpagenum2+String(']')
 // basename+diffmacroにするかbasename2作るかは要検討
 if(getDiff() == 0){
 return　basename+Exttype;

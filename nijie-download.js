@@ -30,12 +30,11 @@
   };
 
   getDiff =　function() {
-    var diff = $('#img_diff a:last').attr("href");
+    var diff = $('#img_diff a').length;
     if (diff == null){
       return diff = 0
     }else{
-      diff = diff.replace(/[0-9]+/,'');
-      return diff.replace('./view_popup.php?id=&#diff_','');
+      return diff;
     }
   }
   getTag = function(Tagnum){
@@ -148,6 +147,7 @@ BT = function(){
   console.log('get TagNum:'+getTagnum());
   console.log('get All Tag');
   getTags()
+  console.log(getDiff())
   chrome.runtime.onMessage.addListener(function(request,sender){
 console.log('login:'+checkLogin());
 if (checkLogin() == true){

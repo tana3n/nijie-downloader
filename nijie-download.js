@@ -1,7 +1,7 @@
   'use strict'; 
   var checkLogin, getSrcURL,　getExttype,　getDiff, getFile, BT, dl;
   //macro
-  var getTitle, getIllustID, getFilename, getDiffmacro, getUsername, getUserID;
+  var getTagnum,getTags,getTag, getTitle, getIllustID, getFilename, getDiffmacro, getUsername, getUserID;
   
   checkLogin = function(){
    if($('#main>div').attr("class") == 'login'){
@@ -38,13 +38,28 @@
       return diff.replace('./view_popup.php?id=&#diff_','');
     }
   }
-    
+  getTag = function(Tagnum){
+    var e = $('#view-tag .tag').eq(Tagnum).text()
+    //replace Taglock
+    return e.replace('*','');
+  }
+  //タグ数取得
+  getTagnum = function(){
+    return $('#view-tag .tag').length;
+  }
+  getTags = function(){
+    var Tagnum = getTagnum();
+    console.log(Tagnum)
+    for(var num = 0; num < Tagnum ; num++){
+     console.log(getTag(num))
+    }
+  }
 //img_diff内に中身があるかどうかで判定かなぁ
 //最後のdiff_*を引っ張り出して枚数検出
     getDiffmacro　=　function(num){
       return (''+num).padStart(2,'0');
-    }
-    //0パテ用
+    }//0パテ用
+    
     getIllustID = function(){
       return $('#img_filter img').attr('illust_id');
     };
@@ -56,10 +71,10 @@
     };
     getUsername = function(){
       return $('#pro img').attr('alt');
-    } 
+    };
     getExttype = function(url){
       return url.match(/\.[^.]+$/);
-    }
+    };
     // $('#ID名 ほげほげ')でaとかliとかの子要素がとれる（空白だとJqueryだと孫要素いけます ＞だと子だけなので明示したいときはそっちかな
 //attr('ほげ');で(classとかhrefとか)の内容が拾える
 
@@ -128,6 +143,11 @@ BT = function(){
      filename: filename
     });
   };
+
+  console.log('for Debug');
+  console.log('get TagNum:'+getTagnum());
+  console.log('get All Tag');
+  getTags()
   chrome.runtime.onMessage.addListener(function(request,sender){
 console.log('login:'+checkLogin());
 if (checkLogin() == true){

@@ -14,12 +14,13 @@
   //一枚目
     if(diff == 0){    
       var imgfilter = $('#img_filter img').attr("src");
-      if (imgfilter.length > 0) {
+      if (imgfilter == null) {
+        imgfilter = $('#img_filter video').attr("src");
+        if (imgfilter.length == null){
+          return null;
+        }
+        }
         return imgfilter;
-      } else {
-        console.log('cant get SrcURL');  
-        return null;
-      }
     }else if(diff > 0){
       var imgfilter = $('#img_diff img').eq(diff-1).attr("src");
       imgfilter　= imgfilter.replace('__rs_l120x120/','');
@@ -60,14 +61,27 @@
     }//0パテ用
     
     getIllustID = function(){
-      return $('#img_filter img').attr('illust_id');
+      var img = $('#img_filter img').attr('illust_id');
+      if (img == null){
+        return $('#img_filter video').attr('illust_id');
+        } else{
+      return img 
+      }
     };
     getUserID = function(){
-      return $('#img_filter img').attr('user_id');
-    };
+      var img = $('#img_filter img').attr('user_id');
+      if (img == null){
+        return $('#img_filter video').attr('user_id');
+        } else{
+      return img
+      }    };
     getTitle = function(){
-      return $('#img_filter img').attr('alt');
-    };
+      var img = $('#img_filter img').attr('alt');
+      if (img == null){
+        return $('#img_filter video').attr('alt');
+        } else{
+      return img
+      }    };
     getUsername = function(){
       return $('#pro img').attr('alt');
     };

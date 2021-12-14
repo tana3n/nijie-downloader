@@ -150,7 +150,7 @@ BT = function(){
   }
 
   getFile = function(url, filename) {
-    return chrome.extension.sendMessage({
+    return chrome.runtime.sendMessage({
      type: 'download',
      url: url,
      filename: filename

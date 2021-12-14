@@ -5,10 +5,7 @@
     "version": "1.0",
     "author": "tana3n",
     "icons": {
-        "16": "icon_32.png",
-        "32": "icon_32.png",
-        "48": "icon_32.png",
-        "128": "icon_32.png"
+        "32": "icon_32.png"
     },
     "content_scripts": [
         {
@@ -19,8 +16,7 @@
         }
       ],
       "background": {
-        "scripts": ["event_page.js"],
-        "persistent": false
+        "scripts": ["event_page.js"]
       },
     "permissions": [
         "downloads",

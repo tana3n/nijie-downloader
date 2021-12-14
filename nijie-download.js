@@ -4,25 +4,23 @@
   var getTagnum,getTags,getTag, getTitle, getIllustID, getFilename, getDiffmacro, getUsername, getUserID;
   
   checkLogin = function(){
-   if($('#main>div').attr("class") == 'login'){
-    return false
-   } else {
-    return true
-   }
-  }
+   
+    if(document.getElementsByClassName('login').length == 1){
+      return false;
+      } else {
+      return true;
+      }
+    }
   getSrcURL = function(diff) {
   //一枚目
     if(diff == 0){    
-      var imgfilter = $('#img_filter img').attr("src");
-      if (imgfilter == null) {
-        imgfilter = $('#img_filter video').attr("src");
-        if (imgfilter.length == null){
-          return null;
-        }
-        }
-        return imgfilter;
-    }else if(diff > 0){
-      var imgfilter = $('#img_diff img').eq(diff-1).attr("src");
+      try{
+          return document.getElementById('img_filter').querySelector('img').src;
+      } catch {
+         return document.getElementById('img_filter').querySelector('video').src;
+      }
+      } else if (diff > 0){
+      var imgfilter =document.getElementById('img_diff').querySelectorAll('img')[diff-1].src;
       imgfilter　= imgfilter.replace('__rs_l120x120/','');
       return imgfilter;
     } else {
@@ -31,7 +29,7 @@
   };
 
   getDiff =　function() {
-    var diff = $('#img_diff a').length;
+    var diff = document.getElementById('img_diff').querySelectorAll('img').length;
     if (diff == null){
       return 0
     }else{
@@ -39,13 +37,13 @@
     }
   }
   getTag = function(Tagnum){
-    var e = $('#view-tag .tag').eq(Tagnum).text()
+    var e = document.getElementById('view-tag').querySelectorAll('.tag')[Tagnum].innerText;
     //replace Taglock
     return e.replace('*','');
   }
   //タグ数取得
   getTagnum = function(){
-    return $('#view-tag .tag').length;
+    return document.getElementById('view-tag').querySelectorAll('.tag').length;
   }
   getTags = function(){
     var Tagnum = getTagnum();
@@ -61,29 +59,28 @@
     }//0パテ用
     
     getIllustID = function(){
-      var img = $('#img_filter img').attr('illust_id');
-      if (img == null){
-        return $('#img_filter video').attr('illust_id');
-        } else{
-      return img 
+      try{
+        return document.getElementById('img_filter').querySelector('img').getAttribute('illust_id');
+      } catch {
+        return  document.getElementById('img_filter').querySelector('video').getAttribute('illust_id');
       }
     };
     getUserID = function(){
-      var img = $('#img_filter img').attr('user_id');
-      if (img == null){
-        return $('#img_filter video').attr('user_id');
-        } else{
-      return img
-      }    };
+      try{
+        return document.getElementById('img_filter').querySelector('img').getAttribute('user_id');
+      } catch {
+        return  document.getElementById('img_filter').querySelector('video').getAttribute('user_id');
+      }
+    };
     getTitle = function(){
-      var img = $('#img_filter img').attr('alt');
-      if (img == null){
-        return $('#img_filter video').attr('alt');
-        } else{
-      return img
-      }    };
+      try{
+        return document.getElementById('img_filter').querySelector('img').getAttribute('alt');
+      } catch {
+        return document.getElementById('img_filter').querySelector('video').getAttribute('alt');
+      }
+    };
     getUsername = function(){
-      return $('#pro img').attr('alt');
+      return document.getElementById('pro').querySelector('img').alt;
     };
     getExttype = function(url){
       return url.match(/\.[^.]+$/);
@@ -93,24 +90,22 @@
 
 
 getFilename　= function(num){
-//とりあえずマクロ化するはずだけどとりあえず仮処理
-//macro
-var Exttype = getExttype(getSrcURL(getDiff()));
-//ExtTypeは必須なのでなんかうまーくreturnにねじ込む
-var Pagenum2 = getDiffmacro(num)
-var Pagenum = num
-var Maxpagenum2 = getDiffmacro(getDiff())
-var Maxpagenum = getDiff()
+  //とりあえずマクロ化するはずだけどとりあえず仮処理
+  //macro
+  console.log(getSrcURL(getDiff()))
+  var Exttype = getExttype(getSrcURL(getDiff()));
+  var Pagenum2 = getDiffmacro(num)
+  var Maxpagenum2 = getDiffmacro(getDiff())
+  var Maxpagenum = getDiff()
 
-var basename = getUsername()+String('(')+getUserID()+String(')')+String(' - ')+getTitle()+String('(')+getIllustID()+String(')')
-var diffmacro = String(' [')+Pagenum2+String(' - ')+Maxpagenum2+String(']')
-// basename+diffmacroにするかbasename2作るかは要検討
-if(getDiff() == 0){
-return　basename+Exttype;
-}else{
-return　basename+diffmacro+Exttype;
-
-}
+  var basename = getUsername()+String('(')+getUserID()+String(')')+String(' - ')+getTitle()+String('(')+getIllustID()+String(')')
+  var diffmacro = String(' [')+Pagenum2+String(' - ')+Maxpagenum2+String(']')
+  // basename+diffmacroにするかbasename2作るかは要検討
+  if(getDiff() == 0){
+    return　basename+Exttype;
+  } else {
+    return　basename+diffmacro+Exttype;
+  }
 //とりあえずデフォはこれで、あとはタグに任意のやつが含まれてたらフォルダ分けぐらいはしたいなぁ（Ex:VOICEROID)
 }
 
@@ -142,8 +137,8 @@ BT = function(){
     var diff = getDiff();
     for(var num = 0; num <= diff ; num++){
       var filename = getFilename(num);
-      var url = 'https:'+getSrcURL(num);
       console.log(filename);
+      var url = getSrcURL(num);
       console.log(url);
       getFile(url,filename);
   }
@@ -163,16 +158,15 @@ BT = function(){
   getTags()
   console.log(getDiff())
   chrome.runtime.onMessage.addListener(function(request,sender){
-console.log('login:'+checkLogin());
-if (checkLogin() == true){
-  //OK
-  console.log("GetPageInfomation")
-  console.log('Username:'+getUsername());  
-  console.log('user_id:'+getUserID());  
-  console.log('Title:'+getTitle());  
-  console.log('illust_id:'+getIllustID());  
-  console.log('差分数:'+getDiffmacro(getDiff()));  
-  dl();
-
-}
+    console.log('login:'+checkLogin());
+    if (checkLogin() == true){
+    //OK
+      console.log("GetPageInfomation")
+      console.log('Username:'+getUsername());  
+      console.log('user_id:'+getUserID());  
+      console.log('Title:'+getTitle());  
+      console.log('illust_id:'+getIllustID());  
+      console.log('差分数:'+getDiffmacro(getDiff()));  
+      dl();
+    }
 });

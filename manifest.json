@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "nijie-downloader",
     "description": "コンテキストメニューからnijieの画像をダウンロード",
-    "version": "1.0",
+    "version": "1.1",
     "author": "tana3n",
     "icons": {
         "32": "icon_32.png"

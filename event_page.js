@@ -1,5 +1,4 @@
   //コンテキスト表示
-  chrome.runtime.onInstalled.addListener(function () {
   chrome.contextMenus.create({
     'id' : "mkcM",
     'title' : 'Nijie Download',
@@ -10,7 +9,6 @@
     'onclick' : function(info){
       chrome.extention.sendMessage({type: 'get'});
     }*/
-  });
   });
   //選択時のイベント
 chrome.contextMenus.onClicked.addListener(function (info,tab) {

@@ -1,7 +1,7 @@
   //コンテキスト表示
   chrome.contextMenus.create({
-    'id' : "mkcM",
-    'title' : 'Nijie Download',
+    'id' : "ndler",
+    'title' : 'Nijie-Downloader',
     'type' : 'normal',
     "contexts" : ["page"],
     "documentUrlPatterns" : ["*://nijie.info/view.php?id=*"]

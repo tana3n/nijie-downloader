@@ -1,37 +1,32 @@
-  {
-    "manifest_version": 2,
-    "name": "nijie-downloader",
-    "description": "コンテキストメニューからnijieの画像をダウンロード",
-    "version": "1.1",
-    "author": "tana3n",
-    "icons": {
-        "32": "icon_32.png"
-    },
-    "content_scripts": [
-        {
-          "matches": [
-            "*://nijie.info/view.php?id=*"],
-          "js": ["nijie-download.js"]
-        }
-      ],
-      "background": {
-        "scripts": ["event_page.js"]
-      },
-    "permissions": [
-        "downloads",
-        "storage",
-        "tabs",
-        "contextMenus",
-        "*://nijie.info/*",
-        "*://pic.nijie.net/"
-    ],
-    "web_accessible_resources": [
-    "icon_32.png"
+{
+  "manifest_version": 2,
+  "name": "nijie-downloader",
+  "description": "コンテキストメニューからnijieの画像をダウンロード",
+  "version": "1.2",
+  "author": "tana3n",
+  "icons": {
+    "32": "icon_32.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://nijie.info/view.php?id=*"],
+      "js": ["nijie-download.js"]
+    }
   ],
-  "options_ui":{
-    "page":"settings.html",
+  "background": {
+    "scripts": ["event_page.js"]
+  },
+  "permissions": [
+    "downloads",
+    "storage",
+    "tabs",
+    "contextMenus",
+    "*://nijie.info/*",
+    "*://pic.nijie.net/"
+  ],
+  "web_accessible_resources": ["icon_32.png"],
+  "options_ui": {
+    "page": "settings.html",
     "chrome_style": true
-
-
   }
 }

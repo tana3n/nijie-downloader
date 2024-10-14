@@ -1,112 +1,143 @@
-  'use strict'; 
-  var checkLogin, getSrcURL,　getExttype,　getDiff, getFile, BT, dl;
-  //macro
-  var getTagnum,getTags,getTag, getTitle, getIllustID, getFilename, getDiffmacro, getUsername, getUserID;
-  
+"use strict";
+
 function checkLogin() {
-  if ( document.getElementsByClassName('login').length == 1 ){
+  if (document.getElementsByClassName("login").length == 1) {
     return false;
   } else {
     return true;
   }
 }
-function getSrcURL(diff) {
-  if(diff == 0){//一枚目
-    try{
-      return document.getElementById('img_filter').querySelector('img').src;
-    } catch {
-      return document.getElementById('img_filter').querySelector('video').src;
-    }
-  } else if (diff > 0) {
-    var imgfilter =document.getElementById('img_diff').querySelectorAll('img')[diff-1].src;
-    imgfilter　= imgfilter.replace('__rs_l120x120/','');
-    return imgfilter;
-  } else {
-    console.log('no detect img_diff')
-  }
-};
 
-function getDiff() {
-  var diff = document.getElementById('img_diff').querySelectorAll('img').length;
-  if (diff == null){
-    return 0
+async function getSrcURL(PopUpPage, diff) {
+  try {
+    return getImage(PopUpPage, diff);
+  } catch {
+    return console.log("no detect img_diff");
+  }
+}
+
+async function getImage(PopUpPage, diff) {
+  return PopUpPage.getElementsByClassName("box-shadow999")[diff].src;
+}
+
+async function getPage(uri) {
+  const res = await fetch(uri, { credentials: "include" });
+  const text = await res.text();
+  const PopUpPage = new DOMParser().parseFromString(text, "text/html");
+  return PopUpPage;
+}
+async function getPopUpPage() {
+  const uri =
+    "https://nijie.info/view_popup.php?id=" +
+    document.baseURI.match(/(?<=id=)[0-9]*/);
+  console.log(uri);
+  return await getPage(uri);
+}
+
+function getDiff(PopUpPage) {
+  var diff = PopUpPage.getElementsByClassName("box-shadow999").length;
+  if (diff == null) {
+    return 0;
   } else {
     return diff;
   }
 }
 
-function getTag(Tagnum){
-  var e = document.getElementById('view-tag').querySelectorAll('.tag')[Tagnum].innerText;
-  return e.replace('*','');//replace Taglock
+function getTag(Tagnum) {
+  var e = document.getElementById("view-tag").querySelectorAll(".tag")[
+    Tagnum
+  ].innerText;
+  return e.replace("*", ""); //replace Taglock
 }
-  //タグ数取得
-function getTagnum(){
-  return document.getElementById('view-tag').querySelectorAll('.tag').length;
+//タグ数取得
+function getTagnum() {
+  return document.getElementById("view-tag").querySelectorAll(".tag").length;
 }
 
-function getTags(){
+function getTags() {
   var Tagnum = getTagnum();
-  for(var num = 0; num < Tagnum ; num++){
-     console.log(getTag(num))
+  for (var num = 0; num < Tagnum; num++) {
+    console.log(getTag(num));
   }
 }
-//img_diff内に中身があるかどうかで判定かなぁ
-//最後のdiff_*を引っ張り出して枚数検出
-function getDiffmacro(num){
-  return (''+(num+1)).padStart(2,'0');
-}//0パテ用
+//3桁枚はあり得る、のか……？
+function getDiffmacro(num) {
+  return ("" + (num + 1)).padStart(2, "0");
+}
 
 //この3つは統合できそう&img videoは初手で判定させた方がきれいなので保留
-getIllustID = function(){
-  try{
-    return document.getElementById('img_filter').querySelector('img').getAttribute('illust_id');
+function getIllustID() {
+  try {
+    return document
+      .getElementById("img_filter")
+      .querySelector("img")
+      .getAttribute("illust_id");
   } catch {
-    return  document.getElementById('img_filter').querySelector('video').getAttribute('illust_id');
+    return document
+      .getElementById("img_filter")
+      .querySelector("video")
+      .getAttribute("illust_id");
   }
-};
-getUserID = function(){
-  try{
-    return document.getElementById('img_filter').querySelector('img').getAttribute('user_id');
+}
+function getUserID() {
+  try {
+    return document
+      .getElementById("img_filter")
+      .querySelector("img")
+      .getAttribute("user_id");
   } catch {
-    return  document.getElementById('img_filter').querySelector('video').getAttribute('user_id');
+    return document
+      .getElementById("img_filter")
+      .querySelector("video")
+      .getAttribute("user_id");
   }
-};
-getTitle = function(){
-  try{
-    return document.getElementById('img_filter').querySelector('img').getAttribute('alt');
+}
+function getTitle() {
+  try {
+    return document
+      .getElementById("img_filter")
+      .querySelector("img")
+      .getAttribute("alt");
   } catch {
-    return document.getElementById('img_filter').querySelector('video').getAttribute('alt');
+    return document
+      .getElementById("img_filter")
+      .querySelector("video")
+      .getAttribute("alt");
   }
-};
-    
-getUsername = function(){
-  return document.getElementById('pro').querySelector('img').alt;
-};
-
-getExttype = function(url){
-  return url.match(/\.[^.]+$/);
-};
-
-getFilename　= function(num){
-  //とりあえずマクロ化するはずだけどとりあえず仮処理
-  //macro
-  console.log(getSrcURL(num))
-  var Exttype = getExttype(getSrcURL(num));
-  var Pagenum2 = getDiffmacro(num)
-  var Maxpagenum2 = getDiffmacro(getDiff())
-  var Maxpagenum = getDiff()
-
-  var basename = getUsername()+String('(')+getUserID()+String(')')+String(' - ')+getTitle()+String('(')+getIllustID()+String(')')
-  var diffmacro = String(' [')+Pagenum2+String(' - ')+Maxpagenum2+String(']')
-  // basename+diffmacroにするかbasename2作るかは要検討
-  if(getDiff() == 0){
-    return　basename+Exttype;
-  } else {
-    return　basename+diffmacro+Exttype;
-  }
-//とりあえずデフォはこれで、あとはタグに任意のやつが含まれてたらフォルダ分けぐらいはしたいなぁ（Ex:VOICEROID)
 }
 
+function getUsername() {
+  return document.getElementById("pro").querySelector("img").alt;
+}
+
+function getExttype(url) {
+  return url.match(/\.[^.]+$/);
+}
+
+async function getFilename(uri, num, diff) {
+  const Exttype = getExttype(uri);
+  const Pagenum2 = getDiffmacro(num);
+  const Maxpagenum2 = getDiffmacro(diff);
+
+  var basename =
+    getUsername() +
+    String("(") +
+    getUserID() +
+    String(")") +
+    String(" - ") +
+    getTitle() +
+    String("(") +
+    getIllustID() +
+    String(")");
+  var diffmacro =
+    String(" [") + Pagenum2 + String(" - ") + Maxpagenum2 + String("]");
+  // basename+diffmacroにするかbasename2作るかは要検討
+  if (diff <= 1) {
+    return basename + Exttype;
+  } else {
+    return basename + diffmacro + Exttype;
+  }
+}
 
 //dlボタンはしばらく忘れよう
 /*
@@ -131,40 +162,51 @@ BT = function(){
     return parent.prepend(div);
   };
 }*/
-  dl = function(){
-    var diff = getDiff();
-    for(var num = 0; num <= diff ; num++){
-      var filename = getFilename(num);
-      console.log(filename);
-      var url = getSrcURL(num);
-      console.log(url);
-      getFile(url,filename);
-  }
-  }
+async function dl() {
+  console.log("get TagNum:" + getTagnum());
+  console.log("get All Tag");
+  getTags();
 
-  getFile = function(url, filename) {
-    return chrome.runtime.sendMessage({
-     type: 'download',
-     url: url,
-     filename: filename
-    });
-  };
-//せめてDebugフラグ立ってたらとか、ね？
-  console.log('for Debug');
-  console.log('get TagNum:'+getTagnum());
-  console.log('get All Tag');
-  getTags()
-  console.log(getDiff())
-  chrome.runtime.onMessage.addListener(function(request,sender){
-    console.log('login:'+checkLogin());
-    if (checkLogin() == true){
-    //OK
-      console.log("GetPageInfomation")
-      console.log('Username:'+getUsername());  
-      console.log('user_id:'+getUserID());  
-      console.log('Title:'+getTitle());  
-      console.log('illust_id:'+getIllustID());  
-      console.log('差分数:'+getDiffmacro(getDiff()));  
+  console.log("GetPageInfomation");
+  console.log("Username:" + getUsername());
+  console.log("user_id:" + getUserID());
+  console.log("Title:" + getTitle());
+  console.log("illust_id:" + getIllustID());
+
+  // fetch popup.php
+  const PopUp = await getPopUpPage();
+  const diff = getDiff(PopUp);
+
+  console.log(diff);
+
+  for (var num = 0; num < diff; num++) {
+    var url = await getSrcURL(PopUp, num);
+    console.log(url);
+    var filename = await getFilename(url, num, diff);
+    console.log(filename);
+
+    getFile(url, filename);
+  }
+}
+
+function getFile(url, filename) {
+  console.log(url);
+  return chrome.runtime.sendMessage({
+    type: "download",
+    url: url,
+    filename: filename,
+  });
+}
+
+function main() {
+  console.log("for Debug");
+  chrome.runtime.onMessage.addListener(function (request, sender) {
+    console.log("login:" + checkLogin());
+    if (checkLogin()) {
       dl();
+    } else {
+      console.log("Failed login check");
     }
-});
+  });
+}
+main();

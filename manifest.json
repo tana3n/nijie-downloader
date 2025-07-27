@@ -1,8 +1,8 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "nijie-downloader",
   "description": "コンテキストメニューからnijieの画像をダウンロード",
-  "version": "1.2",
+  "version": "2.0.0",
   "author": "tana3n",
   "icons": {
     "32": "icon_32.png"
@@ -14,19 +14,27 @@
     }
   ],
   "background": {
-    "scripts": ["event_page.js"]
+    "preferred_environment": [ "document" ],
+    "scripts": [ "event_page.js" ],
+    "service_worker": "event_page.js",
+    "type": "module"
   },
   "permissions": [
     "downloads",
     "storage",
     "tabs",
-    "contextMenus",
+    "contextMenus"
+  ],
+  "host_permissions":[
     "*://nijie.info/*",
     "*://pic.nijie.net/"
   ],
-  "web_accessible_resources": ["icon_32.png"],
-  "options_ui": {
-    "page": "settings.html",
-    "chrome_style": true
-  }
+  "web_accessible_resources": [
+    {
+      "resources": ["icon_32.png"],
+      "matches": ["https://nijie.info/*"]
+    }]
+  // "options_ui": {
+  //   "page": "settings.html"
+  // }
 }

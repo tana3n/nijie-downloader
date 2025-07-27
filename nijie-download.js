@@ -61,10 +61,12 @@ function getTags() {
   }
 }
 //3桁枚はあり得る、のか……？
-function getDiffmacro(num) {
+function getCurrentDiffmacro(num) {
   return ("" + (num + 1)).padStart(2, "0");
 }
-
+function getDiffmacro(num) {
+  return ("" + (num)).padStart(2, "0");
+}
 //この3つは統合できそう&img videoは初手で判定させた方がきれいなので保留
 function getIllustID() {
   try {
@@ -116,7 +118,7 @@ function getExttype(url) {
 
 async function getFilename(uri, num, diff) {
   const Exttype = getExttype(uri);
-  const Pagenum2 = getDiffmacro(num);
+  const Pagenum2 = getCurrentDiffmacro(num);
   const Maxpagenum2 = getDiffmacro(diff);
 
   var basename =
